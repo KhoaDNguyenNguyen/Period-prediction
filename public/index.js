@@ -16,7 +16,8 @@ if (tokenFromOAuth) {
 const token = localStorage.getItem('jwt');
 if (!token) {
   alert('Bạn chưa đăng nhập! Chuyển đến trang đăng nhập.');
-  window.location.href = 'SignUp_LogIn_Form.html';
+  // window.location.href = 'SignUp_LogIn_Form.html';
+    window.location.href = 'index.html';
   throw new Error('No JWT token, redirecting to login');
 }
 

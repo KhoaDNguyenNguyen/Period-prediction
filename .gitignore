@@ -1,3 +1,4 @@
 /.env
 /Login
 /node_modules
+/.git apply fix-bug.diff

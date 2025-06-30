@@ -46,7 +46,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Khi truy cập root, redirect về login form
 app.get('/', (req, res) => {
-  res.redirect('/SignUp_LogIn_Form.html');
+  // res.redirect('/SignUp_LogIn_Form.html');
+    res.redirect('/index.html');
 });
 
 
