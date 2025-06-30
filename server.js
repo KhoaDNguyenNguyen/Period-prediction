@@ -1,56 +1,48 @@
 // server.js  (ES Modules)
-// -------------------------------------------
 import express from 'express';
-import cors    from 'cors';
-import dotenv  from 'dotenv';
-import helmet  from 'helmet';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import bcrypt  from 'bcrypt';
-import jwt     from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { neon } from '@neondatabase/serverless';
-// import dotenv from 'dotenv';
-dotenv.config(); 
 import passport from 'passport';
-import session from 'express-session';
 import './passport.js';
+import authRoutes from './authRoutes.js';
+import path from 'path';
 
-// 1) .env
-// dotenv.config();
+dotenv.config();
+
+// 1) Kiểm tra biến môi trường
 if (!process.env.DATABASE_URL) throw new Error('Missing DATABASE_URL');
 if (!process.env.JWT_SECRET)    throw new Error('Missing JWT_SECRET');
 
-// 2) Neon SQL client
+// 2) Khởi tạo Neon client
 const sql = neon(process.env.DATABASE_URL);
 
-// 3) App setup
+// 3) Tạo app và middleware chung
 const app = express();
 app.use(express.json({ limit: '1mb' }));
-import path from 'path';
-const __dirname = path.resolve();
-
-// Serve thư mục public
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Với SPA, redirect mọi route không khớp API về index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
-// 4) CORS: đọc từ biến môi trường
+// 4) CORS từ biến môi trường
 const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
 app.use(cors({ origin: allowedOrigins }));
 
+// 5) Passport OAuth
 app.use(passport.initialize());
-
-import authRoutes from './authRoutes.js';
 app.use('/auth', authRoutes);
-// 5) Health check
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-// 6) Register
+// 6) API routes
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Register
 app.post('/api/register', async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
@@ -72,7 +64,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// 7) Login
+// Login
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -96,22 +88,21 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// 8) JWT middleware
+// JWT middleware
 function authenticate(req, res, next) {
   const auth = req.headers.authorization?.split(' ');
   if (auth?.[0] !== 'Bearer' || !auth[1]) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
   try {
-    const payload = jwt.verify(auth[1], process.env.JWT_SECRET);
-    req.user = payload;
+    req.user = jwt.verify(auth[1], process.env.JWT_SECRET);
     next();
   } catch {
     return res.status(401).json({ error: 'Token không hợp lệ' });
   }
 }
 
-// 9) Survey (protected)
+// Survey (protected)
 app.post('/api/survey', authenticate, async (req, res) => {
   try {
     await sql`
@@ -121,18 +112,46 @@ app.post('/api/survey', authenticate, async (req, res) => {
         ${req.user.userId}
       )
     `;
-    return res.json({ ok: true });
+    res.json({ ok: true });
   } catch (err) {
     console.error('DB insert failed:', err);
-    return res.status(500).json({ error: 'DB insert failed' });
+    res.status(500).json({ error: 'DB insert failed' });
   }
 });
 
-// 10) Start server
+// 7) Serve frontend (static + routes)
+
+// Đặt __dirname
+const __dirname = path.resolve();
+
+// Serve mọi asset tĩnh (CSS, JS, hình ảnh, fonts…)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Khi user vào "/", trả về trang login
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'SignUp_LogIn_Form.html'));
+});
+
+// Route cho survey
+app.get('/survey', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'survey.html'));
+});
+
+// Catch-all cho SPA (nếu user vào các đường dẫn khác)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'SignUp_LogIn_Form.html'));
+});
+
+// 8) Khởi động server
 const PORT = process.env.PORT ?? 3000;
 const server = app.listen(PORT, () =>
   console.log(`API listening on http://localhost:${PORT}`)
 );
-['SIGINT','SIGTERM'].forEach(sig =>
-  process.on(sig, () => { console.log('\n⏹  Closing server...'); server.close(() => process.exit(0)); })
+
+// Bắt tín hiệu dừng để đóng server gọn gàng
+['SIGINT', 'SIGTERM'].forEach(sig =>
+  process.on(sig, () => {
+    console.log('\n⏹  Closing server...');
+    server.close(() => process.exit(0));
+  })
 );
