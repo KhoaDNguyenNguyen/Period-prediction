@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
         if (!res.ok || !data.token) throw new Error(data.error || 'Đăng nhập thất bại');
         localStorage.setItem('jwt', data.token);
-        window.location.href = 'index.html';
+        window.location.href = 'survey.html';
       } catch (err) {
         loginMsgEl.style.color = 'red';
         loginMsgEl.textContent = err.message;

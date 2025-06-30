@@ -8,7 +8,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const tokenFromOAuth = urlParams.get('token');
 if (tokenFromOAuth) {
   localStorage.setItem('jwt', tokenFromOAuth);
-  window.history.replaceState({}, document.title, "index.html");
+  // window.history.replaceState({}, document.title, "index.html");
+    window.history.replaceState({}, document.title, "survey.html");
 }
 
 // 2. Kiểm tra JWT token trong localStorage
