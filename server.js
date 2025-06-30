@@ -41,6 +41,16 @@ app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Khi truy cập root, redirect về login form
+app.get('/', (req, res) => {
+  res.redirect('/SignUp_LogIn_Form.html');
+});
+
+
+
 // 4) CORS
 const allowedOrigins = [
   'http://127.0.0.1:5500',
