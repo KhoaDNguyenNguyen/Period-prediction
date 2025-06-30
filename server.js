@@ -133,9 +133,13 @@ app.get('/', (req, res) => {
 });
 
 // Route cho survey
-app.get('/survey', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'survey.html'));
-});
+app.get(
+  '/survey',
+  authenticate,
+  (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'survey.html'));
+  }
+);
 
 // Catch-all cho SPA (nếu user vào các đường dẫn khác)
 app.get('*', (req, res) => {
