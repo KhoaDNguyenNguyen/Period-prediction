@@ -125,7 +125,11 @@ app.post('/api/survey', authenticate, async (req, res) => {
 const __dirname = path.resolve();
 
 // Serve mọi asset tĩnh (CSS, JS, hình ảnh, fonts…)
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(
+  path.join(__dirname, 'public'),
+  { index: false }    // 🛑 Tắt mặc định index.html
+));
 
 // Khi user vào "/", trả về trang login
 app.get('/', (req, res) => {
