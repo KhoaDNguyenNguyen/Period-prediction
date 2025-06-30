@@ -1,23 +1,88 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <title>Khảo sát sức khỏe chu kỳ – SurveyJS</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link href="https://unpkg.com/survey-core@2.2.0/survey-core.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/survey-core@2.2.0/survey.core.min.js"></script>
-  <script src="https://unpkg.com/survey-js-ui@2.2.0/survey-js-ui.min.js"></script>
-
-  <script src="index.js" defer></script>
+  <title>Login/Signup Form</title>
+  <link rel="stylesheet" href="SignUp_LogIn_Form.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>
-  <div id="surveyContainer" style="max-width:900px;margin:auto;"></div>
+  <div class="container">
+    <!-- ===== LOGIN FORM ===== -->
+    <div class="form-box login">
+      <form id="loginForm">
+        <h1>Đăng nhập</h1>
+        <div class="input-box">
+          <input id="loginEmail" type="email" placeholder="Email" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+        <div class="input-box">
+          <input id="loginPassword" type="password" placeholder="Password" required>
+          <i class='bx bxs-lock-alt'></i>
+        </div>
+        <!-- Nơi hiển thị lỗi hoặc thông báo -->
+        <p id="loginMessage" class="message"></p>
+        <button type="submit" class="btn">Đăng nhập</button>
+        <p>Or login with social platforms</p>
+        <div class="social-icons">
+<!-- SignUp_LogIn_Form.html (đã sửa) :contentReference[oaicite:0]{index=0} -->
+<a href="/auth/google"><i class='bx bxl-google'></i></a>
+<a href="/auth/facebook"><i class='bx bxl-facebook'></i></a>
+<a href="/auth/github"><i class='bx bxl-github'></i></a>
+<a href="/auth/linkedin"><i class='bx bxl-linkedin'></i></a>
 
-  <div id="resultsContainer" style="display:none;max-width:900px;margin:2rem auto;">
-    <h3>Kết quả JSON:</h3>
-    <pre id="surveyResults"
-         style="white-space:pre-wrap;background:#f5f5f5;padding:1rem;border-radius:6px;"></pre>
+        </div>
+      </form>
+    </div>
+
+    <div class="form-box register">
+      <form id="registerForm">
+        <h1>Đăng ký</h1>
+        <div class="input-box">
+          <input id="regUsername" type="text" placeholder="Username" required>
+          <i class='bx bxs-user'></i>
+        </div>
+        <div class="input-box">
+          <input id="regEmail" type="email" placeholder="Email" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+        <div class="input-box">
+          <input id="regPassword" type="password" placeholder="Password" required>
+          <i class='bx bxs-lock-alt'></i>
+        </div>
+        <!-- Nơi hiển thị lỗi hoặc thông báo -->
+        <p id="regMessage" class="message"></p>
+        <button type="submit" class="btn">Đăng ký</button>
+        <p>Or register with social platforms</p>
+        <div class="social-icons">
+<!-- SignUp_LogIn_Form.html (đã sửa) :contentReference[oaicite:0]{index=0} -->
+<a href="/auth/google"><i class='bx bxl-google'></i></a>
+<a href="/auth/facebook"><i class='bx bxl-facebook'></i></a>
+<a href="/auth/github"><i class='bx bxl-github'></i></a>
+<a href="/auth/linkedin"><i class='bx bxl-linkedin'></i></a>
+
+
+        </div>
+      </form>
+    </div>
+
+    <!-- ===== TOGGLE PANELS ===== -->
+    <div class="toggle-box">
+      <div class="toggle-panel toggle-left">
+        <h1>Hello, Welcome!</h1>
+        <p>Don't have an account?</p>
+        <button class="btn register-btn">Register</button>
+      </div>
+      <div class="toggle-panel toggle-right">
+        <h1>Welcome Back!</h1>
+        <p>Already have an account?</p>
+        <button class="btn login-btn">Login</button>
+      </div>
+    </div>
   </div>
+
+  <!-- Đưa script xuống cuối body để DOM đã sẵn sàng -->
+  <script src="SignUp_LogIn_Form.js"></script>
 </body>
 </html>

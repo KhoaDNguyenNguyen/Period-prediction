@@ -115,39 +115,26 @@ app.post('/api/survey', authenticate, async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.error('DB insert failed:', err);
-    res.status(500).json({ error: 'DB insert failed' });
+    res.status(500).json({ error: 'DB insert thất bại' });
   }
 });
 
-// 7) Serve frontend (static + routes)
+// 7) Serve frontend
 
 // Đặt __dirname
 const __dirname = path.resolve();
 
-// Serve mọi asset tĩnh (CSS, JS, hình ảnh, fonts…)
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(
-  path.join(__dirname, 'public'),
-  { index: false }    // 🛑 Tắt mặc định index.html
-));
+// Serve mọi asset tĩnh trong public (bao gồm index.html)
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Khi user vào "/", trả về trang login
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'SignUp_LogIn_Form.html'));
+// Route cho survey page (chỉ cho user đã auth xem)
+app.get('/survey', authenticate, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'survey.html'));
 });
 
-// Route cho survey
-app.get(
-  '/survey',
-  authenticate,
-  (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'survey.html'));
-  }
-);
-
-// Catch-all cho SPA (nếu user vào các đường dẫn khác)
+// Catch-all: mọi request khác (ngoại trừ API và /survey) sẽ trả về login page
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'SignUp_LogIn_Form.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 8) Khởi động server
