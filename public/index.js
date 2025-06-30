@@ -1,5 +1,7 @@
 // 1. Khai báo API endpoint
-const API = 'http://localhost:3000/api';
+// const API = 'http://localhost:3000/api';
+const API = '/api';
+
 
 // 1. Lấy token từ URL nếu vừa đăng nhập OAuth
 const urlParams = new URLSearchParams(window.location.search);

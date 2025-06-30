@@ -15,9 +15,7 @@ const issueJWT = (user, res) => {
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
   // Redirect về frontend kèm token (bạn có thể đổi URL nếu cần)
-  // res.redirect(`http://localhost:5500/index.html?token=${token}`);
-  res.redirect(`${process.env.FRONTEND_URL}/survey?token=${token}`);
-
+  res.redirect(`http://localhost:5500/index.html?token=${token}`);
 };
 
 // ===== GOOGLE =====
