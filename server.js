@@ -1,4 +1,4 @@
-// server.js  (ES Modules)
+// server.js (ES Modules)
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -14,7 +14,7 @@ import path from 'path';
 
 dotenv.config();
 
-// 1) Kiểm tra biến môi trường
+// 1) Env check
 if (!process.env.DATABASE_URL) throw new Error('Missing DATABASE_URL');
 if (!process.env.JWT_SECRET)    throw new Error('Missing JWT_SECRET');
 
@@ -27,7 +27,7 @@ app.use(express.json({ limit: '1mb' }));
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
-// 4) CORS từ biến môi trường
+// 4) CORS từ ENV
 const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
 app.use(cors({ origin: allowedOrigins }));
 
@@ -35,7 +35,7 @@ app.use(cors({ origin: allowedOrigins }));
 app.use(passport.initialize());
 app.use('/auth', authRoutes);
 
-// 6) API routes
+// --- API routes ---
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -72,10 +72,13 @@ app.post('/api/login', async (req, res) => {
   }
   try {
     const [user] = await sql`SELECT * FROM users WHERE email = ${email}`;
-    if (!user) return res.status(401).json({ error: 'Sai email hoặc mật khẩu' });
+    if (!user) {
+      return res.status(401).json({ error: 'Sai email hoặc mật khẩu' });
+    }
     const valid = await bcrypt.compare(password, user.password_hash);
-    if (!valid) return res.status(401).json({ error: 'Sai email hoặc mật khẩu' });
-
+    if (!valid) {
+      return res.status(401).json({ error: 'Sai email hoặc mật khẩu' });
+    }
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       process.env.JWT_SECRET,
@@ -90,19 +93,19 @@ app.post('/api/login', async (req, res) => {
 
 // JWT middleware
 function authenticate(req, res, next) {
-  const auth = req.headers.authorization?.split(' ');
-  if (auth?.[0] !== 'Bearer' || !auth[1]) {
+  const authHeader = req.headers.authorization?.split(' ');
+  if (authHeader?.[0] !== 'Bearer' || !authHeader[1]) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
   try {
-    req.user = jwt.verify(auth[1], process.env.JWT_SECRET);
+    req.user = jwt.verify(authHeader[1], process.env.JWT_SECRET);
     next();
   } catch {
     return res.status(401).json({ error: 'Token không hợp lệ' });
   }
 }
 
-// Survey (protected)
+// Survey POST (protected)
 app.post('/api/survey', authenticate, async (req, res) => {
   try {
     await sql`
@@ -119,34 +122,31 @@ app.post('/api/survey', authenticate, async (req, res) => {
   }
 });
 
-// 7) Serve frontend
+// --- Serve frontend ---
 
-// Đặt __dirname
+// Xác định __dirname
 const __dirname = path.resolve();
 
-// Serve mọi asset tĩnh trong public (bao gồm index.html)
+// Serve tất cả file tĩnh trong public (bao gồm index.html và survey.html)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route cho survey page (chỉ cho user đã auth xem)
+// GET / → trả về login page (public/index.html)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// GET /survey → trả về survey page (public/survey.html), chỉ khi đã auth
 app.get('/survey', authenticate, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'survey.html'));
 });
 
-// Catch-all: mọi request khác (ngoại trừ API và /survey) sẽ trả về login page
+// Catch-all: route nào không match API hoặc /survey thì trả về login
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 8) Khởi động server
 const PORT = process.env.PORT ?? 3000;
-const server = app.listen(PORT, () =>
-  console.log(`API listening on http://localhost:${PORT}`)
-);
-
-// Bắt tín hiệu dừng để đóng server gọn gàng
-['SIGINT', 'SIGTERM'].forEach(sig =>
-  process.on(sig, () => {
-    console.log('\n⏹  Closing server...');
-    server.close(() => process.exit(0));
-  })
+app.listen(PORT, () =>
+  console.log(`Server listening on port ${PORT}`)
 );
