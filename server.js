@@ -25,15 +25,24 @@ const sql = neon(process.env.DATABASE_URL);
 // 3) App setup
 const app = express();
 app.use(express.json({ limit: '1mb' }));
+import path from 'path';
+const __dirname = path.resolve();
+
+// Serve thư mục public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Với SPA, redirect mọi route không khớp API về index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
-// 4) CORS
-const allowedOrigins = [
-  'http://127.0.0.1:5500',
-  'http://localhost:5500'
-];
+// 4) CORS: đọc từ biến môi trường
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
 app.use(cors({ origin: allowedOrigins }));
+
 app.use(passport.initialize());
 
 import authRoutes from './authRoutes.js';

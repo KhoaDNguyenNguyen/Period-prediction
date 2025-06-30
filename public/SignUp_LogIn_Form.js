@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 3) API base URL
-  const API = 'http://localhost:3000/api';
+  // const API = 'http://localhost:3000/api';
+  const API = process.env.API_URL || '/api';
 
   // 4) Registration
   const registerForm = document.getElementById('registerForm');
