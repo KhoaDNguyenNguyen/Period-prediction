@@ -38,16 +38,12 @@ app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
 // Sau khi app = express();
-app.use(express.static(path.join(__dirname, 'public')));
-
-
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Khi truy cập root, redirect về login form
+// Khi truy cập root, luôn trả về trang đăng nhập
 app.get('/', (req, res) => {
-  // res.redirect('/SignUp_LogIn_Form.html');
-    res.redirect('/index.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 
