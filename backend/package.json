@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.0.0",
@@ -35,6 +34,6 @@
   },
   "license": "MIT",
   "styles": [
-    "styles/SignUp_LogIn_Form.css"
+    "styles/login.css"
   ]
 }
