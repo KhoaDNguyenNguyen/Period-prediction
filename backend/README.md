@@ -2,12 +2,12 @@
 
 ## Overview
 
-This project is a backend application for the Refactor Period Prediction system. It provides user authentication, including OAuth support for Google, Facebook, GitHub, and LinkedIn, as well as user registration and login functionalities. The application is built using Node.js and Express, and it utilizes PostgreSQL for data storage.
+This project is a backend application for the Refactor Period Prediction system. It provides user authentication, including OAuth support for Google, Facebook, Apple, and Magic Email, as well as user registration and login functionalities. The application is built using Node.js and Express, and it utilizes PostgreSQL for data storage.
 
 ## Features
 
 - User registration and login
-- OAuth authentication with Google, Facebook, GitHub, and LinkedIn
+- OAuth authentication with Google, Facebook, Apple, and Magic Email
 - JWT-based authentication for secure API access
 - Environment variable management for sensitive information
 
@@ -17,7 +17,7 @@ This project is a backend application for the Refactor Period Prediction system.
 
 - Node.js (version 18 or higher)
 - PostgreSQL database
-- A valid OAuth application setup for Google, Facebook, GitHub, and LinkedIn
+- A valid OAuth application setup for Google, Facebook, Apple, and Magic Email
 
 ### Installation
 
@@ -52,10 +52,11 @@ GOOGLE_CLIENT_ID='your_google_client_id'
 GOOGLE_CLIENT_SECRET='your_google_client_secret'
 FACEBOOK_APP_ID='your_facebook_app_id'
 FACEBOOK_APP_SECRET='your_facebook_app_secret'
-GITHUB_CLIENT_ID='your_github_client_id'
-GITHUB_CLIENT_SECRET='your_github_client_secret'
-LINKEDIN_CLIENT_ID='your_linkedin_client_id'
-LINKEDIN_CLIENT_SECRET='your_linkedin_client_secret'
+APPLE_CLIENT_ID='your_apple_client_id'
+APPLE_TEAM_ID='your_apple_team_id'
+APPLE_KEY_ID='your_apple_key_id'
+APPLE_PRIVATE_KEY='your_apple_private_key'
+MAGIC_SECRET='your_magic_secret'
 ```
 
 ### API Endpoints
@@ -64,8 +65,8 @@ LINKEDIN_CLIENT_SECRET='your_linkedin_client_secret'
 - **POST /api/login**: Log in an existing user.
 - **GET /auth/google**: Authenticate with Google.
 - **GET /auth/facebook**: Authenticate with Facebook.
-- **GET /auth/github**: Authenticate with GitHub.
-- **GET /auth/linkedin**: Authenticate with LinkedIn.
+- **GET /auth/apple**: Authenticate with Apple.
+- **POST /auth/magic**: Authenticate via Magic Email.
 
 ### License
 

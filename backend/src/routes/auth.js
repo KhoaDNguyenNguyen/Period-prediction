@@ -93,20 +93,20 @@ router.get(
   }
 );
 
-// GitHub OAuth
-router.get('/github', passport.authenticate('github', {scope: ['user:email'], session: false}));
-router.get(
-  '/github/callback',
-  passport.authenticate('github', {session: false}),
+// Apple OAuth
+router.get('/apple', passport.authenticate('apple'));
+router.post(
+  '/apple/callback',
+  passport.authenticate('apple', {session: false}),
   async (req, res) => {
     try {
-      const {id: providerId, username: ghUsername, emails} = req.user;
+      const {id: providerId, emails} = req.user;
       const email = emails?.[0]?.value;
       if (!email) throw new Error('No email from provider');
 
       let [local] = await sql`SELECT id, username FROM users WHERE email = ${email}`;
       if (!local) {
-        const username = ghUsername || `user_${providerId}`;
+        const username = `user_${providerId}`;
         const randomPass = bcrypt.hashSync(Date.now().toString(), 10);
         [local] = await sql`
           INSERT INTO users (username, email, password_hash)
@@ -127,23 +127,19 @@ router.get(
   }
 );
 
-// LinkedIn OAuth
-router.get(
-  '/linkedin',
-  passport.authenticate('linkedin', {scope: ['r_liteprofile', 'r_emailaddress'], session: false})
-);
-router.get(
-  '/linkedin/callback',
-  passport.authenticate('linkedin', {session: false}),
+// Magic email authentication
+router.post(
+  '/magic',
+  passport.authenticate('magiclogin', {session: false}),
   async (req, res) => {
     try {
-      const {id: providerId, displayName, emails} = req.user;
-      const email = emails?.[0]?.value;
+      const {emails} = req.user;
+      const email = emails?.[0]?.value || req.user.email;
       if (!email) throw new Error('No email from provider');
 
       let [local] = await sql`SELECT id, username FROM users WHERE email = ${email}`;
       if (!local) {
-        const username = displayName || `user_${providerId}`;
+        const username = email.split('@')[0];
         const randomPass = bcrypt.hashSync(Date.now().toString(), 10);
         [local] = await sql`
           INSERT INTO users (username, email, password_hash)
