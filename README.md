@@ -1,12 +1,15 @@
 # Project Title: Refactor Period Prediction
 
 ## Overview
+
 This project is designed to provide a robust and secure web application for user authentication and survey management. It utilizes OAuth for social login and JWT for secure session management.
 
 ## Project Structure
+
 The project is divided into two main parts: the backend and the frontend.
 
 ### Backend
+
 The backend is built using Node.js and Express. It handles user authentication, database interactions, and API endpoints.
 
 - **src/config/passport.js**: Configures Passport strategies for OAuth authentication (Google, Facebook, GitHub, LinkedIn).
@@ -21,6 +24,7 @@ The backend is built using Node.js and Express. It handles user authentication, 
 - **README.md**: Documentation for the backend application.
 
 ### Frontend
+
 The frontend is built using HTML, CSS, and JavaScript. It provides a user-friendly interface for authentication and survey participation.
 
 - **public/index.html**: Main HTML file serving as the entry point for the web application.
@@ -35,17 +39,21 @@ The frontend is built using HTML, CSS, and JavaScript. It provides a user-friend
 ## Setup Instructions
 
 ### Prerequisites
+
 - Node.js (version 18 or higher)
 - PostgreSQL database
 
 ### Installation
+
 1. Clone the repository:
+
    ```
    git clone <repository-url>
    cd refactor-period-prediction
    ```
 
 2. Navigate to the backend directory and install dependencies:
+
    ```
    cd backend
    npm install
@@ -54,11 +62,13 @@ The frontend is built using HTML, CSS, and JavaScript. It provides a user-friend
 3. Create a `.env` file in the backend directory and populate it with your environment variables. Refer to the `.env.example` for the required variables.
 
 4. Start the backend server:
+
    ```
    npm run dev
    ```
 
 5. Navigate to the frontend directory and install dependencies:
+
    ```
    cd ../frontend
    npm install
@@ -67,13 +77,16 @@ The frontend is built using HTML, CSS, and JavaScript. It provides a user-friend
 6. Open the `public/index.html` file in your browser to access the application.
 
 ## Usage
+
 - Users can register and log in using their email or social media accounts.
 - After logging in, users can participate in surveys and view their results.
 
 ## Security Considerations
+
 - Ensure that the `.env` file is not exposed in version control.
 - Use HTTPS in production to secure data in transit.
 - Regularly update dependencies to mitigate vulnerabilities.
 
 ## License
+
 This project is licensed under the MIT License.

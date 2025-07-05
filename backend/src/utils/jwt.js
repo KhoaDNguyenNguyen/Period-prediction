@@ -7,7 +7,7 @@ export const generateToken = (user) => {
     userId: user.id,
     username: user.username,
   };
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign(payload, JWT_SECRET, {expiresIn: '1h'});
 };
 
 export const verifyToken = (token) => {

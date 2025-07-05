@@ -1,9 +1,11 @@
 # Refactor Period Prediction Backend
 
 ## Overview
+
 This project is a backend application for the Refactor Period Prediction system. It provides user authentication, including OAuth support for Google, Facebook, GitHub, and LinkedIn, as well as user registration and login functionalities. The application is built using Node.js and Express, and it utilizes PostgreSQL for data storage.
 
 ## Features
+
 - User registration and login
 - OAuth authentication with Google, Facebook, GitHub, and LinkedIn
 - JWT-based authentication for secure API access
@@ -12,18 +14,22 @@ This project is a backend application for the Refactor Period Prediction system.
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (version 18 or higher)
 - PostgreSQL database
 - A valid OAuth application setup for Google, Facebook, GitHub, and LinkedIn
 
 ### Installation
+
 1. Clone the repository:
+
    ```
    git clone <repository-url>
    cd refactor-period-prediction/backend
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    ```
@@ -36,7 +42,9 @@ This project is a backend application for the Refactor Period Prediction system.
    ```
 
 ### Environment Variables
+
 Make sure to set the following environment variables in your `.env` file:
+
 ```
 DATABASE_URL='your_database_url'
 JWT_SECRET='your_jwt_secret'
@@ -51,6 +59,7 @@ LINKEDIN_CLIENT_SECRET='your_linkedin_client_secret'
 ```
 
 ### API Endpoints
+
 - **POST /api/register**: Register a new user.
 - **POST /api/login**: Log in an existing user.
 - **GET /auth/google**: Authenticate with Google.
@@ -59,4 +68,5 @@ LINKEDIN_CLIENT_SECRET='your_linkedin_client_secret'
 - **GET /auth/linkedin**: Authenticate with LinkedIn.
 
 ### License
+
 This project is licensed under the MIT License. See the LICENSE file for more details.
