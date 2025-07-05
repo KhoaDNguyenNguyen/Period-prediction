@@ -12,7 +12,7 @@ The project is divided into two main parts: the backend and the frontend.
 
 The backend is built using Node.js and Express. It handles user authentication, database interactions, and API endpoints.
 
-- **src/config/passport.js**: Configures Passport strategies for OAuth authentication (Google, Facebook, GitHub, LinkedIn).
+ - **src/config/passport.js**: Configures Passport strategies for OAuth authentication (Google, Facebook, Apple, Magic Email).
 - **src/middleware/authenticate.js**: Middleware for JWT authentication, verifying tokens and attaching user information to requests.
 - **src/routes/api.js**: Defines API routes for the application, handling various endpoints.
 - **src/routes/auth.js**: Manages user registration and login, including OAuth callback handling.

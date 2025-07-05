@@ -60,13 +60,13 @@ router.get(
 );
 
 /* -------------------------------------------------------------------------- */
-/*  GITHUB OAUTH                                                               */
+/*  APPLE OAUTH                                                                */
 /* -------------------------------------------------------------------------- */
-router.get('/github', passport.authenticate('github', {scope: ['user:email']}));
+router.get('/apple', passport.authenticate('apple'));
 
-router.get(
-  '/github/callback',
-  passport.authenticate('github', {
+router.post(
+  '/apple/callback',
+  passport.authenticate('apple', {
     session: false,
     failureRedirect: '/index.html',
   }),
@@ -74,18 +74,20 @@ router.get(
 );
 
 /* -------------------------------------------------------------------------- */
-/*  LINKEDIN OAUTH                                                             */
+/*  MAGIC EMAIL AUTH                                                           */
 /* -------------------------------------------------------------------------- */
-router.get(
-  '/linkedin',
-  passport.authenticate('linkedin', {
-    scope: ['r_liteprofile', 'r_emailaddress'],
-  })
+router.post(
+  '/magic',
+  passport.authenticate('magiclogin', {
+    session: false,
+    failureRedirect: '/index.html',
+  }),
+  (req, res) => issueJWT(req.user, res)
 );
 
 router.get(
-  '/linkedin/callback',
-  passport.authenticate('linkedin', {
+  '/magic/callback',
+  passport.authenticate('magiclogin', {
     session: false,
     failureRedirect: '/index.html',
   }),

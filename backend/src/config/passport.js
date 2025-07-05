@@ -1,8 +1,8 @@
 import passport from 'passport';
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
 import {Strategy as FacebookStrategy} from 'passport-facebook';
-import {Strategy as GitHubStrategy} from 'passport-github2';
-import {Strategy as LinkedInStrategy} from 'passport-linkedin-oauth2';
+import {Strategy as AppleStrategy} from 'passport-apple';
+import MagicLoginStrategy from 'passport-magic-login';
 
 const callback = (accessToken, refreshToken, profile, done) => {
   return done(null, profile);
@@ -32,25 +32,27 @@ passport.use(
 );
 
 passport.use(
-  new GitHubStrategy(
+  new AppleStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: `${process.env.BACKEND_URL}/auth/github/callback`,
+      clientID: process.env.APPLE_CLIENT_ID,
+      teamID: process.env.APPLE_TEAM_ID,
+      keyID: process.env.APPLE_KEY_ID,
+      callbackURL: `${process.env.BACKEND_URL}/auth/apple/callback`,
+      privateKeyString: process.env.APPLE_PRIVATE_KEY,
     },
     callback
   )
 );
 
 passport.use(
-  new LinkedInStrategy(
-    {
-      clientID: process.env.LINKEDIN_CLIENT_ID,
-      clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
-      callbackURL: `${process.env.BACKEND_URL}/auth/linkedin/callback`,
+  new MagicLoginStrategy({
+    secret: process.env.MAGIC_SECRET,
+    callbackUrl: `${process.env.BACKEND_URL}/auth/magic/callback`,
+    verify: (payload, done) => done(null, {id: payload.destination, emails: [{value: payload.destination}]}),
+    sendMagicLink: async (dest, href) => {
+      console.log('Magic link for', dest, href);
     },
-    callback
-  )
+  })
 );
 
 export default passport;
